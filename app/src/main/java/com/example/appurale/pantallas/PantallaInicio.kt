@@ -95,10 +95,9 @@ fun PantallaInicio(navController: NavController) {
                 )
             }
 
-            // Botón mejorado con animación hover (opcional)
             Button(
                 onClick = {
-                    navController.navigate("add")
+                    navController.navigate("actividades")
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFFDF220B),

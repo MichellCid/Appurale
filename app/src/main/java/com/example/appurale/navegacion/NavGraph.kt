@@ -18,6 +18,10 @@ fun AppNavigation() {
             PantallaInicio(navController)
         }
 
+        composable("actividades") {
+            PantallaActividades(navController)
+        }
+
         composable("add") {
             PantallaAgregar(navController)
         }
