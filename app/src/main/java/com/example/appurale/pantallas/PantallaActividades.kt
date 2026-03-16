@@ -3,14 +3,14 @@ package com.example.appurale.pantallas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -20,23 +20,23 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.appurale.viewmodel.TareasViewModel
 
 @Composable
-fun PantallaActividades(navController: NavController) {
+fun PantallaActividades(
+    navController: NavController,
+    viewModel: TareasViewModel
+) {
 
-    val listaActividades = remember {
-        mutableStateListOf(
-            "Actividad 1: Boiler",
-            "Actividad 2: Ir a la escuela",
-            "Actividad 3",
-            "Actividad 4",
-            "Actividad 5"
-        )
-    }
+    val listaActividades = viewModel.tareas
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
 
         Column {
+
+
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -49,8 +49,15 @@ fun PantallaActividades(navController: NavController) {
                             )
                         )
                     )
-                    .shadow(elevation = 8.dp, shape = RoundedCornerShape(bottomStart = 20.dp, bottomEnd = 20.dp))
+                    .shadow(
+                        elevation = 8.dp,
+                        shape = RoundedCornerShape(
+                            bottomStart = 20.dp,
+                            bottomEnd = 20.dp
+                        )
+                    )
             ) {
+
                 Row(
                     modifier = Modifier
                         .fillMaxSize()
@@ -63,6 +70,7 @@ fun PantallaActividades(navController: NavController) {
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
+
                         Icon(
                             imageVector = Icons.Default.List,
                             contentDescription = null,
@@ -71,6 +79,7 @@ fun PantallaActividades(navController: NavController) {
                         )
 
                         Column {
+
                             Text(
                                 text = "APPURALE",
                                 color = Color.White.copy(alpha = 0.8f),
@@ -81,7 +90,6 @@ fun PantallaActividades(navController: NavController) {
                             Text(
                                 text = "ACTIVIDADES",
                                 color = Color.White,
-                                style = MaterialTheme.typography.headlineMedium,
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 28.sp,
                                 modifier = Modifier.padding(top = 4.dp)
@@ -89,19 +97,22 @@ fun PantallaActividades(navController: NavController) {
                         }
                     }
 
-
                     Card(
                         colors = CardDefaults.cardColors(
                             containerColor = Color.White.copy(alpha = 0.2f)
                         ),
                         shape = RoundedCornerShape(16.dp)
                     ) {
+
                         Text(
                             text = "${listaActividades.size}",
                             color = Color.White,
                             fontWeight = FontWeight.Bold,
                             fontSize = 18.sp,
-                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                            modifier = Modifier.padding(
+                                horizontal = 16.dp,
+                                vertical = 8.dp
+                            )
                         )
                     }
                 }
@@ -109,12 +120,13 @@ fun PantallaActividades(navController: NavController) {
 
             Spacer(modifier = Modifier.height(20.dp))
 
+
             LazyColumn(
                 modifier = Modifier.padding(horizontal = 20.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
 
-                items(listaActividades) { actividad ->
+                itemsIndexed(listaActividades) { index, tarea ->
 
                     Card(
                         colors = CardDefaults.cardColors(
@@ -123,7 +135,10 @@ fun PantallaActividades(navController: NavController) {
                         shape = RoundedCornerShape(12.dp),
                         modifier = Modifier
                             .fillMaxWidth()
-                            .shadow(elevation = 4.dp, shape = RoundedCornerShape(12.dp))
+                            .shadow(
+                                elevation = 4.dp,
+                                shape = RoundedCornerShape(12.dp)
+                            )
                     ) {
 
                         Row(
@@ -135,7 +150,7 @@ fun PantallaActividades(navController: NavController) {
                         ) {
 
                             Text(
-                                text = actividad,
+                                text = tarea.nombre,
                                 color = Color.White,
                                 fontWeight = FontWeight.Medium,
                                 fontSize = 16.sp
@@ -143,9 +158,14 @@ fun PantallaActividades(navController: NavController) {
 
                             IconButton(
                                 onClick = {
-                                    navController.navigate("timer")
+
+                                    navController.navigate(
+                                        "add/$index"
+                                    )
+
                                 }
                             ) {
+
                                 Icon(
                                     imageVector = Icons.Default.Edit,
                                     contentDescription = "Editar",
@@ -158,17 +178,22 @@ fun PantallaActividades(navController: NavController) {
             }
         }
 
+
         FloatingActionButton(
             onClick = {
-                navController.navigate("add")
+
+                navController.navigate("add/-1")
+
             },
             containerColor = Color(0xFF8f1414),
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(20.dp)
                 .size(80.dp)
-                .shadow(elevation = 8.dp, shape = RoundedCornerShape(16.dp))
-
+                .shadow(
+                    elevation = 8.dp,
+                    shape = RoundedCornerShape(16.dp)
+                )
         ) {
 
             Icon(
