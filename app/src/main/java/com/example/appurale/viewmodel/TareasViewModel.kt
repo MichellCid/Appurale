@@ -44,4 +44,11 @@ class TareasViewModel : ViewModel() {
         )
     }
 
+    fun obtenerTarea(index: Int) = tareas[index]
+
+    fun tareaValida(index: Int): Boolean {
+        return index >= 0 && index < tareas.size
+    }
+
+
 }

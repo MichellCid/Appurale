@@ -61,10 +61,21 @@ fun AppNavigation() {
 
 
 
-        composable("timer") {
+        composable(
+            route = "detalle/{index}",
+            arguments = listOf(
+                navArgument("index") {
+                    type = NavType.IntType
+                }
+            )
+        ) { backStackEntry ->
+
+            val index = backStackEntry.arguments?.getInt("index") ?: 0
 
             PantallaDetalles(
-                navController = navController
+                navController = navController,
+                index = index,
+                viewModel = tareasViewModel
             )
         }
     }

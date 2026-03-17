@@ -1,9 +1,140 @@
 package com.example.appurale.pantallas
 
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.appurale.utilidades.RelojPomodoro
+import com.example.appurale.viewmodel.TareasViewModel
+import kotlinx.coroutines.delay
 
 @Composable
-fun PantallaDetalles(navController: NavController){
+fun PantallaDetalles(
+    navController: NavController,
+    index: Int,
+    viewModel: TareasViewModel
+) {
 
+    if (!viewModel.tareaValida(index)) {
+        Text("Tarea no válida")
+        return
+    }
+
+    val tarea = viewModel.obtenerTarea(index)
+
+    val tiempoTotal = ((tarea.fin - tarea.inicio) / 1000).toInt()
+
+    var tiempoRestante by remember {
+        mutableStateOf(
+            ((tarea.fin - System.currentTimeMillis()) / 1000).toInt()
+        )
+    }
+
+    if (tiempoRestante < 0) tiempoRestante = 0
+
+    var pausado by remember { mutableStateOf(false) }
+    var finalizado by remember { mutableStateOf(false) }
+
+
+    LaunchedEffect(pausado, finalizado) {
+
+        while (tiempoRestante > 0 && !pausado && !finalizado) {
+            delay(1000)
+            tiempoRestante--
+        }
+
+        if (tiempoRestante <= 0) {
+            finalizado = true
+        }
+    }
+
+    Column(
+
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(20.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            IconButton(onClick = {
+                navController.popBackStack()
+            }) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "Regresar"
+                )
+            }
+        }
+
+        Text(
+            text = tarea.nombre,
+            style = MaterialTheme.typography.headlineMedium
+        )
+
+        Spacer(modifier = Modifier.height(30.dp))
+
+        Text(
+            text = tarea.inicio.toString(),
+            style = MaterialTheme.typography.headlineMedium
+        )
+
+        Spacer(modifier = Modifier.height(30.dp))
+
+        Text(
+            text = tarea.fin.toString(),
+            style = MaterialTheme.typography.headlineMedium
+        )
+
+        Spacer(modifier = Modifier.height(30.dp))
+
+
+        RelojPomodoro(
+            tiempoRestante = tiempoRestante,
+            tiempoTotal = tiempoTotal
+        )
+
+        Spacer(modifier = Modifier.height(30.dp))
+
+        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+
+            Button(onClick = {
+                pausado = !pausado
+            }) {
+                Text(if (pausado) "Reanudar" else "Pausar")
+            }
+
+            Button(onClick = {
+                finalizado = true
+                navController.popBackStack()
+            }) {
+                Text("Finalizar")
+            }
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        if (finalizado) {
+
+            Button(onClick = {
+                tiempoRestante = tiempoTotal
+                pausado = false
+                finalizado = false
+            }) {
+                Text("Reiniciar")
+            }
+        }
+    }
 }

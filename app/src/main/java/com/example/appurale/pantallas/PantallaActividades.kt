@@ -1,6 +1,7 @@
 package com.example.appurale.pantallas
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -153,7 +154,12 @@ fun PantallaActividades(
                                 text = tarea.nombre,
                                 color = Color.White,
                                 fontWeight = FontWeight.Medium,
-                                fontSize = 16.sp
+                                fontSize = 16.sp,
+                                        modifier = Modifier
+                                        .weight(1f)
+                                        .clickable {
+                                            navController.navigate("detalle/$index")
+                                        }
                             )
 
                             IconButton(
