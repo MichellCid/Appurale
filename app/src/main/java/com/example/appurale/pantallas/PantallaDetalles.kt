@@ -5,6 +5,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -13,6 +14,9 @@ import androidx.navigation.NavController
 import com.example.appurale.utilidades.RelojPomodoro
 import com.example.appurale.viewmodel.TareasViewModel
 import kotlinx.coroutines.delay
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 @Composable
 fun PantallaDetalles(
@@ -89,17 +93,7 @@ fun PantallaDetalles(
 
         Spacer(modifier = Modifier.height(30.dp))
 
-        Text(
-            text = tarea.inicio.toString(),
-            style = MaterialTheme.typography.headlineMedium
-        )
-
-        Spacer(modifier = Modifier.height(30.dp))
-
-        Text(
-            text = tarea.fin.toString(),
-            style = MaterialTheme.typography.headlineMedium
-        )
+        MostrarHoras(tarea.inicio, tarea.fin)
 
         Spacer(modifier = Modifier.height(30.dp))
 
@@ -165,5 +159,20 @@ fun PantallaDetalles(
                 }
             )
         }
+    }
+}
+
+@Composable
+fun MostrarHoras(inicio: Long, fin: Long) {
+    val formato = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
+
+    Column {
+        Text(text = "Inicio: ${formato.format(Date(inicio))}",
+                style = MaterialTheme.typography.headlineMedium)
+
+        Spacer(modifier = Modifier.height(30.dp))
+
+        Text(text = "Fin: ${formato.format(Date(fin))}",
+            style = MaterialTheme.typography.headlineMedium)
     }
 }

@@ -14,6 +14,7 @@ import androidx.navigation.NavController
 import com.example.appurale.viewmodel.TareasViewModel
 import java.text.SimpleDateFormat
 import java.util.*
+import com.example.appurale.utilidades.AlarmaProgramador
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -24,6 +25,8 @@ fun PantallaAgregar(
 ) {
 
     val context = LocalContext.current
+
+    val programador = remember { AlarmaProgramador(context) }
 
     var nombre by remember { mutableStateOf("") }
 
@@ -239,6 +242,8 @@ fun PantallaAgregar(
                         intervalo
                     )
                 }
+
+                programador.programarVibracion(intervalo.toInt())
 
                 navController.popBackStack()
             },
