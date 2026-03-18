@@ -28,6 +28,8 @@ fun PantallaDetalles(
 
     val tarea = viewModel.obtenerTarea(index)
 
+    var mostrarDialogo by remember { mutableStateOf(false) }
+
     val tiempoTotal = ((tarea.fin - tarea.inicio) / 1000).toInt()
 
     var tiempoRestante by remember {
@@ -51,6 +53,7 @@ fun PantallaDetalles(
 
         if (tiempoRestante <= 0) {
             finalizado = true
+            mostrarDialogo = true
         }
     }
 
@@ -135,6 +138,32 @@ fun PantallaDetalles(
             }) {
                 Text("Reiniciar")
             }
+        }
+
+        if (mostrarDialogo) {
+
+            AlertDialog(
+                onDismissRequest = { },
+
+                title = {
+                    Text("Tiempo terminado")
+                },
+
+                text = {
+                    Text("La actividad ha finalizado")
+                },
+
+                confirmButton = {
+
+                    Button(
+                        onClick = {
+                            mostrarDialogo = false
+                        }
+                    ) {
+                        Text("Aceptar")
+                    }
+                }
+            )
         }
     }
 }
